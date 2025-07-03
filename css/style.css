@@ -1,0 +1,92 @@
+body {
+    background-image: url("../images/backgrounds/sf-bg-1.jpg");
+    margin: 1rem auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.main-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-container {
+    background-image: url(../images/cardback.jpg);
+    width: auto;
+    height: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: 3px solid gold;
+}
+
+.mortal-kombat {
+    background-image: url("../images/cards/mortal-kombat.svg");
+    background-repeat: no-repeat;
+    display: block;
+    width: 187px;
+    height: 187px;
+    /* transform: scale(0.75); */
+    transform-origin: top left;
+    border: 3px solid gold;
+}
+
+.street-fighter {
+    background-image: url("../images/cards/street-fighter.svg");
+    background-repeat: no-repeat;
+    display: block;
+    width: 187px;
+    height: 187px;
+    /* transform: scale(0.75); */
+    transform-origin: top left;
+    border: 3px solid gold;
+}
+
+.image-1 {
+    background-position: 0 0;
+}
+
+.image-2 {
+    background-position: -187px 0;
+}
+
+.image-3 {
+    background-position: -374px 0;
+}
+
+.image-4 {
+    background-position: 0 -187px;
+}
+
+.image-5 {
+    background-position: -187px -187px;
+}
+
+.image-6 {
+    background-position: -374px -187px;
+}
+
+.image-7 {
+    background-position: 0 -374px;
+}
+
+.image-8 {
+    background-position: -187px -374px;
+}
+
+.image-9 {
+    background-position: -374px -374px;
+}
+
+.hidden {
+    opacity: 0;
+}
