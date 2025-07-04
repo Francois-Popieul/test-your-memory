@@ -1,5 +1,13 @@
+html {
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: whitesmoke;
+}
+
 body {
-    background-image: url("../images/backgrounds/sf-bg-1.jpg");
+    background-image: url("");
+    background-color: #00272B;
     margin: 1rem auto;
     background-repeat: no-repeat;
     background-size: cover;
@@ -7,9 +15,31 @@ body {
 }
 
 .main-container {
-    width: 90%;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.play-button {
+    font-family: "Tiny5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #00272B;
+    color: whitesmoke;
+    font-size: 2rem;
+    padding: 1rem 1rem;
+    cursor: pointer;
+}
+
 
 .flex-container {
     display: flex;
@@ -21,7 +51,7 @@ body {
 }
 
 .card-container {
-    background-image: url(../images/cardback.jpg);
+    background-image: url(../images/mk-cardback.svg);
     width: auto;
     height: 100%;
     background-size: contain;
