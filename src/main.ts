@@ -1,14 +1,18 @@
-let pairNumber: number = 4;
+let difficultyIndex: number = 0;
 let languageIndex: number = 0;
-let deckIndex: number = 2;
+let deckIndex: number = 0;
+const buttonPressSound = new Audio("../audio/button-press.wav");
+const mortalKombatDeckMusic = new Audio("../audio/mortal-kombat.mp3");
+const streetFighterDeckMusic = new Audio("../audio/street-fighter.mp3");
+const zeldaDeckMusic = new Audio("../audio/zelda.mp3");
+mortalKombatDeckMusic.loop = true;
+streetFighterDeckMusic.loop = true;
+zeldaDeckMusic.loop = true;
 const images: Array<string> = ["image-1", "image-2", "image-3", "image-4", "image-5", "image-6", "image-7", "image-8", "image-9"];
-const pairs: Array<string> = [...images, ...images];
-pairs.sort(() => Math.random() - 0.5);
 const body: HTMLElement | null = document.querySelector("body");
 
-const difficultyOptions: string[] = [];
-const languageOptions: string[] = ["Français","English","Italiano","português"];
-const deckOptions: string[] = ["Street Fighter", "Mortal Kombat", "Zelda"];
+const languageOptions: string[] = ["English", "Français", "Italiano", "Português", "Русский"];
+const deckOptions: string[] = ["Mortal Kombat", "Street Fighter", "Zelda"];
 
 const deckData: any = [
     {
@@ -20,7 +24,7 @@ const deckData: any = [
     {
         deckName: "street-fighter",
         backgroundImagePath: "../images/backgrounds/sf-bg-2.jpg",
-        cardBack: "../images/ssf-cardback.svg",
+        cardBack: "../images/street-fighter-cardback.svg",
     },
 
     {
@@ -30,23 +34,25 @@ const deckData: any = [
     }
 ]
 
-const languageData: any[] = [
-    //====================================
-    //============== FRENCH ==============
-    //====================================
-    {
-        playButtonText: "Jouer",
-        replayButtonText: "Rejouer",
-        themeLabelText: "Thème",
-        difficultyLabelText: "Difficulté",
-        languageLabelText: "Langue",
-        victoryMessage1Text: "Félicitations !",
-        victoryMessage2Text: "Tu as trouvé toutes les paires !",
-    },
+interface LanguageData {
+    gameSettings: string,
+    playButtonText: string,
+    replayButtonText: string,
+    themeLabelText: string,
+    difficultyLabelText: string,
+    languageLabelText: string,
+    victoryMessage1Text: string,
+    victoryMessage2Text: string,
+    difficultyOptions: string[];
+}
+
+const languageData: LanguageData[] = [
     //====================================
     //============= ENGLISH ==============
     //====================================
     {
+        difficultyOptions: ["Easy", "Medium", "Hard", "Expert"],
+        gameSettings: "Settings",
         playButtonText: "Play",
         replayButtonText: "Play again",
         themeLabelText: "Theme",
@@ -56,9 +62,25 @@ const languageData: any[] = [
         victoryMessage2Text: "You found all the card pairs!",
     },
     //====================================
+    //============== FRENCH ==============
+    //====================================
+    {
+        difficultyOptions: ["Facile", "Intermédiaire", "Difficile", "Expert"],
+        gameSettings: "Paramètres",
+        playButtonText: "Jouer",
+        replayButtonText: "Rejouer",
+        themeLabelText: "Thème",
+        difficultyLabelText: "Difficulté",
+        languageLabelText: "Langue",
+        victoryMessage1Text: "Félicitations !",
+        victoryMessage2Text: "Tu as trouvé toutes les paires !",
+    },
+    //====================================
     //============= ITALIAN ==============
     //====================================
     {
+        difficultyOptions: ["Facile", "Medio", "Difficile", "Esperto"],
+        gameSettings: "Parametri",
         playButtonText: "Gioca",
         replayButtonText: "Nuovo gioco",
         themeLabelText: "Tema",
@@ -71,11 +93,13 @@ const languageData: any[] = [
     //============ PORTUGUESE ============
     //====================================
     {
+        difficultyOptions: ["Fácil", "Intermediário", "Difícil", "Especialista"],
+        gameSettings: "Configurações",
         playButtonText: "Jogar",
         replayButtonText: "Jogar",
         themeLabelText: "Tema",
         difficultyLabelText: "Dificuldade",
-        languageLabelText: "Language",          // update required
+        languageLabelText: "Língua",
         victoryMessage1Text: "Parabéns!",
         victoryMessage2Text: "Você encontrou todos os pares de cartas!",
 
@@ -84,11 +108,13 @@ const languageData: any[] = [
     //============== RUSSIAN =============
     //====================================
     {
+        difficultyOptions: ["Лёгкий", "Средний", "Сложный", "Эксперт"],
+        gameSettings: "Настройки",
         playButtonText: "Играть",
         replayButtonText: "Играть",
         themeLabelText: "Тема",
         difficultyLabelText: "Сложность",
-        languageLabelText: "Language",          // update required
+        languageLabelText: "Язык",
         victoryMessage1Text: "Поздравляем!",
         victoryMessage2Text: "Вы нашли все пары карточек!",
     }
@@ -97,7 +123,7 @@ const languageData: any[] = [
 displayMainMenu();
 
 function displayMainMenu(event?: MouseEvent): void {
-    event?.preventDefault();    
+    event?.preventDefault();
     if (body) {
         body.innerHTML = "";
         const mainElement: HTMLElement = document.createElement("main");
@@ -109,24 +135,35 @@ function displayMainMenu(event?: MouseEvent): void {
         title.style.textAlign = "center";
         const formElement: HTMLFormElement = document.createElement("form");
         formElement.classList.add("form");
+
         const formTitleElement: HTMLParagraphElement = document.createElement("p");
         formTitleElement.classList.add("form-title");
-        formTitleElement.innerText = "Game Settings";
+        formTitleElement.innerText = languageData[languageIndex].gameSettings;
+
         const difficultyDiv: HTMLDivElement = document.createElement("div");
         difficultyDiv.classList.add("field-group-1");
+
         const difficultyLabel: HTMLLabelElement = document.createElement("label");
         difficultyLabel.classList.add("label");
         difficultyLabel.innerText = languageData[languageIndex].difficultyLabelText;
+
         const difficultySettingDiv: HTMLDivElement = document.createElement("div");
-        difficultySettingDiv. classList.add("field-group-2");
+        difficultySettingDiv.classList.add("field-group-2");
+
         const difficultyLeftButton: HTMLButtonElement = document.createElement("button");
         difficultyLeftButton.classList.add("left-arrow-button");
         difficultyLeftButton.addEventListener("click", reduceDifficulty);
+
         const difficultyOptionText: HTMLLabelElement = document.createElement("label");
         difficultyOptionText.classList.add("option-label");
+        difficultyOptionText.id = "difficultyOptionText";
+        difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
+        difficultyOptionText.style.alignContent = "center";
+
         const difficultyRightButton: HTMLButtonElement = document.createElement("button");
         difficultyRightButton.classList.add("right-arrow-button");
         difficultyRightButton.addEventListener("click", increaseDifficulty);
+
         const playButton: HTMLButtonElement = document.createElement("button");
         difficultySettingDiv.append(difficultyLeftButton, difficultyOptionText, difficultyRightButton);
         difficultyDiv.append(difficultyLabel, difficultySettingDiv);
@@ -134,17 +171,28 @@ function displayMainMenu(event?: MouseEvent): void {
 
         const languageDiv: HTMLDivElement = document.createElement("div");
         languageDiv.classList.add("field-group-1");
+
         const languageLabel: HTMLLabelElement = document.createElement("label");
         languageLabel.classList.add("label");
+
         languageLabel.innerText = languageData[languageIndex].languageLabelText;
         const languageSettingDiv: HTMLDivElement = document.createElement("div");
-        languageSettingDiv. classList.add("field-group-2");
+        languageSettingDiv.classList.add("field-group-2");
+
         const languageLeftButton: HTMLButtonElement = document.createElement("button");
         languageLeftButton.classList.add("left-arrow-button");
+        languageLeftButton.addEventListener("click", previousLanguage);
+
         const languageOptionText: HTMLLabelElement = document.createElement("label");
         languageOptionText.classList.add("option-label");
+        languageOptionText.id = "languageOptionText";
+        languageOptionText.innerText = languageOptions[languageIndex];
+        languageOptionText.style.alignContent = "center";
+
         const languageRightButton: HTMLButtonElement = document.createElement("button");
-        languageRightButton.classList.add("right-arrow-button");        
+        languageRightButton.classList.add("right-arrow-button");
+        languageRightButton.addEventListener("click", nextLanguage);
+
         languageSettingDiv.append(languageLeftButton, languageOptionText, languageRightButton);
         languageDiv.append(languageLabel, languageSettingDiv);
 
@@ -152,17 +200,28 @@ function displayMainMenu(event?: MouseEvent): void {
 
         const deckDiv: HTMLDivElement = document.createElement("div");
         deckDiv.classList.add("field-group-1");
+
         const deckLabel: HTMLLabelElement = document.createElement("label");
         deckLabel.classList.add("label");
         deckLabel.innerText = languageData[languageIndex].themeLabelText;
+
         const deckSettingDiv: HTMLDivElement = document.createElement("div");
         deckSettingDiv.classList.add("field-group-2");
+
         const deckLeftButton: HTMLButtonElement = document.createElement("button");
         deckLeftButton.classList.add("left-arrow-button");
+        deckLeftButton.addEventListener("click", previousDeck);
+
         const deckOptionText: HTMLLabelElement = document.createElement("label");
         deckOptionText.classList.add("option-label");
+        deckOptionText.id = "deckOptionText";
+        deckOptionText.innerText = deckOptions[deckIndex];
+        deckOptionText.style.alignContent = "center";
+
         const deckRightButton: HTMLButtonElement = document.createElement("button");
-        deckRightButton.classList.add("right-arrow-button");        
+        deckRightButton.classList.add("right-arrow-button");
+        deckRightButton.addEventListener("click", nextDeck);
+
         deckSettingDiv.append(deckLeftButton, deckOptionText, deckRightButton);
         deckDiv.append(deckLabel, deckSettingDiv);
 
@@ -172,58 +231,115 @@ function displayMainMenu(event?: MouseEvent): void {
         playButton.innerText = languageData[languageIndex].playButtonText;
         playButton.addEventListener("click", playGame);
         formElement.append(formTitleElement, difficultyDiv, languageDiv, deckDiv, playButton);
-        mainElement.append( title, formElement)
+        mainElement.append(title, formElement)
         body.append(mainElement);
     }
 
-    function reduceDifficulty() {
-        if (pairNumber > 4) {
-            pairNumber--;
+    function reduceDifficulty(event?: MouseEvent): void {
+        event?.preventDefault();
+        buttonPressSound.play();
+
+        if (difficultyIndex > 0) {
+            difficultyIndex--;
+            const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionText");
+            if (difficultyOptionText) {
+                difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
+            }
         }
     }
 
-    function increaseDifficulty() {
-        if (pairNumber < 9) {
-            pairNumber++;
+    function increaseDifficulty(event?: MouseEvent): void {
+        event?.preventDefault();
+        buttonPressSound.play();
+        if (difficultyIndex < languageData[languageIndex].difficultyOptions.length - 1) {
+            difficultyIndex++;
+            const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionText");
+            if (difficultyOptionText) {
+                difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
+            }
         }
     }
 
-    function nextLanguage() {
+    function previousLanguage(event?: MouseEvent): void {
+        event?.preventDefault();
+        buttonPressSound.play();
         if (languageIndex > 0) {
             languageIndex--;
+            const languageOptionText: HTMLElement | null = document.getElementById("languageOptionText");
+            if (languageOptionText) {
+                updateMainMenuTexts(languageOptionText);
+            }
         }
     }
 
-    function previousLanguage() {
-        if (languageIndex < languageOptions.length) {
+    function nextLanguage(event?: MouseEvent): void {
+        event?.preventDefault();
+        buttonPressSound.play();
+        if (languageIndex < languageOptions.length - 1) {
             languageIndex++;
+            const languageOptionText: HTMLElement | null = document.getElementById("languageOptionText");
+            if (languageOptionText) {
+                updateMainMenuTexts(languageOptionText);
+            }
         }
     }
 
-    function nextDeck() {
+    function previousDeck(event?: MouseEvent): void {
+        event?.preventDefault();
+        buttonPressSound.play();
         if (deckIndex > 0) {
             deckIndex--;
+            const deckOptionText: HTMLElement | null = document.getElementById("deckOptionText");
+            if (deckOptionText) {
+                deckOptionText.innerText = deckOptions[deckIndex];
+            }
         }
-        
+
     }
 
-    function previousDeck() {
-        if (deckIndex < deckOptions.length) {
+    function nextDeck(event?: MouseEvent): void {
+        event?.preventDefault();
+        buttonPressSound.play();
+        if (deckIndex < deckOptions.length - 1) {
             deckIndex++;
+            const deckOptionText: HTMLElement | null = document.getElementById("deckOptionText");
+            if (deckOptionText) {
+                deckOptionText.innerText = deckOptions[deckIndex];
+            }
         }
+    }
+
+    function updateMainMenuTexts(languageOptionText: HTMLElement) {
+        languageOptionText.innerText = languageOptions[languageIndex];
     }
 }
 
 function playGame(event: MouseEvent): void {
     event.preventDefault();
+    buttonPressSound.play();
+    switch (deckIndex) {
+        case 0:
+            mortalKombatDeckMusic.play();
+            break;
+        case 1:
+            streetFighterDeckMusic.play();
+            break;
+        case 2:
+            zeldaDeckMusic.play();
+            break;
+        default:
+            break;
+    }
+    const pairs: Array<string> = createGameDeck(images);
+    pairs.sort(() => Math.random() - 0.5);
     let clicks: number = 0;
     let foundPairs: number = 0;
     let deckIsLocked: boolean = false;
     let firstClickedCard: string | null = null;
     let secondClickedCard: string | null = null;
     let firstClickedElement: HTMLElement | null = null;
-    let secondClickedElement: HTMLElement | null = null;    
-    
+    let secondClickedElement: HTMLElement | null = null;
+
 
     if (body) {
         body.innerHTML = "";
@@ -277,7 +393,7 @@ function playGame(event: MouseEvent): void {
                 console.log("Bravo ! Tu as trouvé une paire !");
                 clicks = 0;
                 foundPairs++;
-                if (foundPairs == 9) {
+                if (foundPairs == pairs.length / 2) {
                     announceVictory();
                 }
                 deckIsLocked = false;
@@ -299,6 +415,15 @@ function playGame(event: MouseEvent): void {
         firstClickedElement = null;
         secondClickedElement = null;
         deckIsLocked = false;
+    }
+
+    function createGameDeck(cards: Array<string>): string[] {
+        const gameCards: Array<string> = [];
+        for (let index = 0; index < difficultyIndex + 5; index++) {
+            gameCards.push(cards[index]);
+        }
+        const pairs: Array<string> = [...gameCards, ...gameCards];
+        return pairs;
     }
 
     function announceVictory() {
