@@ -1,13 +1,10 @@
+import { languageData } from "./data-language.js";
+import { stopAudio, mainMenuMusic, deckMusics, buttonPressSound } from "./audio.js";
+
 let difficultyIndex: number = 0;
 let languageIndex: number = 0;
 let deckIndex: number = 0;
-const buttonPressSound = new Audio("../audio/button-press.wav");
-const mortalKombatDeckMusic = new Audio("../audio/mortal-kombat.mp3");
-const streetFighterDeckMusic = new Audio("../audio/street-fighter.mp3");
-const zeldaDeckMusic = new Audio("../audio/zelda.mp3");
-mortalKombatDeckMusic.loop = true;
-streetFighterDeckMusic.loop = true;
-zeldaDeckMusic.loop = true;
+
 const images: Array<string> = ["image-1", "image-2", "image-3", "image-4", "image-5", "image-6", "image-7", "image-8", "image-9"];
 const body: HTMLElement | null = document.querySelector("body");
 
@@ -34,111 +31,24 @@ const deckData: any = [
     }
 ]
 
-interface LanguageData {
-    gameSettings: string,
-    playButtonText: string,
-    replayButtonText: string,
-    themeLabelText: string,
-    difficultyLabelText: string,
-    languageLabelText: string,
-    victoryMessage1Text: string,
-    victoryMessage2Text: string,
-    difficultyOptions: string[];
-}
-
-const languageData: LanguageData[] = [
-    //====================================
-    //============= ENGLISH ==============
-    //====================================
-    {
-        difficultyOptions: ["Easy", "Medium", "Hard", "Expert"],
-        gameSettings: "Settings",
-        playButtonText: "Play",
-        replayButtonText: "Play again",
-        themeLabelText: "Theme",
-        difficultyLabelText: "Difficulty",
-        languageLabelText: "Language",
-        victoryMessage1Text: "Congratulations!",
-        victoryMessage2Text: "You found all the card pairs!",
-    },
-    //====================================
-    //============== FRENCH ==============
-    //====================================
-    {
-        difficultyOptions: ["Facile", "Intermédiaire", "Difficile", "Expert"],
-        gameSettings: "Paramètres",
-        playButtonText: "Jouer",
-        replayButtonText: "Rejouer",
-        themeLabelText: "Thème",
-        difficultyLabelText: "Difficulté",
-        languageLabelText: "Langue",
-        victoryMessage1Text: "Félicitations !",
-        victoryMessage2Text: "Tu as trouvé toutes les paires !",
-    },
-    //====================================
-    //============= ITALIAN ==============
-    //====================================
-    {
-        difficultyOptions: ["Facile", "Medio", "Difficile", "Esperto"],
-        gameSettings: "Parametri",
-        playButtonText: "Gioca",
-        replayButtonText: "Nuovo gioco",
-        themeLabelText: "Tema",
-        difficultyLabelText: "Difficoltà",
-        languageLabelText: "Lingua",
-        victoryMessage1Text: "Bravo!",
-        victoryMessage2Text: "Hai trovato tutte le coppie di carte!",
-    },
-    //====================================
-    //============ PORTUGUESE ============
-    //====================================
-    {
-        difficultyOptions: ["Fácil", "Intermediário", "Difícil", "Especialista"],
-        gameSettings: "Configurações",
-        playButtonText: "Jogar",
-        replayButtonText: "Jogar",
-        themeLabelText: "Tema",
-        difficultyLabelText: "Dificuldade",
-        languageLabelText: "Língua",
-        victoryMessage1Text: "Parabéns!",
-        victoryMessage2Text: "Você encontrou todos os pares de cartas!",
-
-    },
-    //====================================
-    //============== RUSSIAN =============
-    //====================================
-    {
-        difficultyOptions: ["Лёгкий", "Средний", "Сложный", "Эксперт"],
-        gameSettings: "Настройки",
-        playButtonText: "Играть",
-        replayButtonText: "Играть",
-        themeLabelText: "Тема",
-        difficultyLabelText: "Сложность",
-        languageLabelText: "Язык",
-        victoryMessage1Text: "Поздравляем!",
-        victoryMessage2Text: "Вы нашли все пары карточек!",
-    }
-]
-
 displayMainMenu();
 
 function displayMainMenu(event?: MouseEvent): void {
     event?.preventDefault();
+    stopAudio(deckMusics[deckIndex]);
     if (body) {
         body.innerHTML = "";
         const mainElement: HTMLElement = document.createElement("main");
         mainElement.classList.add("main-container");
         const title: HTMLHeadingElement = document.createElement("h1");
         title.innerText = "Test Your Memory";
-        title.style.fontSize = "5rem";
-        title.style.fontWeight = "700";
-        title.style.textAlign = "center";
         const formElement: HTMLFormElement = document.createElement("form");
         formElement.classList.add("form");
 
         const formTitleElement: HTMLParagraphElement = document.createElement("p");
         formTitleElement.classList.add("form-title");
         formTitleElement.innerText = languageData[languageIndex].gameSettings;
+        formTitleElement.id = "gameSettingID";
 
         const difficultyDiv: HTMLDivElement = document.createElement("div");
         difficultyDiv.classList.add("field-group-1");
@@ -146,6 +56,7 @@ function displayMainMenu(event?: MouseEvent): void {
         const difficultyLabel: HTMLLabelElement = document.createElement("label");
         difficultyLabel.classList.add("label");
         difficultyLabel.innerText = languageData[languageIndex].difficultyLabelText;
+        difficultyLabel.id = "difficultyLabelID";
 
         const difficultySettingDiv: HTMLDivElement = document.createElement("div");
         difficultySettingDiv.classList.add("field-group-2");
@@ -156,9 +67,9 @@ function displayMainMenu(event?: MouseEvent): void {
 
         const difficultyOptionText: HTMLLabelElement = document.createElement("label");
         difficultyOptionText.classList.add("option-label");
-        difficultyOptionText.id = "difficultyOptionText";
         difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
         difficultyOptionText.style.alignContent = "center";
+        difficultyOptionText.id = "difficultyOptionTextID";
 
         const difficultyRightButton: HTMLButtonElement = document.createElement("button");
         difficultyRightButton.classList.add("right-arrow-button");
@@ -168,14 +79,14 @@ function displayMainMenu(event?: MouseEvent): void {
         difficultySettingDiv.append(difficultyLeftButton, difficultyOptionText, difficultyRightButton);
         difficultyDiv.append(difficultyLabel, difficultySettingDiv);
 
-
         const languageDiv: HTMLDivElement = document.createElement("div");
         languageDiv.classList.add("field-group-1");
 
         const languageLabel: HTMLLabelElement = document.createElement("label");
         languageLabel.classList.add("label");
-
         languageLabel.innerText = languageData[languageIndex].languageLabelText;
+        languageLabel.id = "languageLabelID";
+
         const languageSettingDiv: HTMLDivElement = document.createElement("div");
         languageSettingDiv.classList.add("field-group-2");
 
@@ -185,9 +96,9 @@ function displayMainMenu(event?: MouseEvent): void {
 
         const languageOptionText: HTMLLabelElement = document.createElement("label");
         languageOptionText.classList.add("option-label");
-        languageOptionText.id = "languageOptionText";
         languageOptionText.innerText = languageOptions[languageIndex];
         languageOptionText.style.alignContent = "center";
+        languageOptionText.id = "languageOptionTextID";
 
         const languageRightButton: HTMLButtonElement = document.createElement("button");
         languageRightButton.classList.add("right-arrow-button");
@@ -196,14 +107,13 @@ function displayMainMenu(event?: MouseEvent): void {
         languageSettingDiv.append(languageLeftButton, languageOptionText, languageRightButton);
         languageDiv.append(languageLabel, languageSettingDiv);
 
-
-
         const deckDiv: HTMLDivElement = document.createElement("div");
         deckDiv.classList.add("field-group-1");
 
         const deckLabel: HTMLLabelElement = document.createElement("label");
         deckLabel.classList.add("label");
         deckLabel.innerText = languageData[languageIndex].themeLabelText;
+        deckLabel.id = "deckLabelID";
 
         const deckSettingDiv: HTMLDivElement = document.createElement("div");
         deckSettingDiv.classList.add("field-group-2");
@@ -214,9 +124,9 @@ function displayMainMenu(event?: MouseEvent): void {
 
         const deckOptionText: HTMLLabelElement = document.createElement("label");
         deckOptionText.classList.add("option-label");
-        deckOptionText.id = "deckOptionText";
         deckOptionText.innerText = deckOptions[deckIndex];
         deckOptionText.style.alignContent = "center";
+        deckOptionText.id = "deckOptionTextID";
 
         const deckRightButton: HTMLButtonElement = document.createElement("button");
         deckRightButton.classList.add("right-arrow-button");
@@ -225,11 +135,11 @@ function displayMainMenu(event?: MouseEvent): void {
         deckSettingDiv.append(deckLeftButton, deckOptionText, deckRightButton);
         deckDiv.append(deckLabel, deckSettingDiv);
 
-
-
         playButton.classList.add("play-button");
         playButton.innerText = languageData[languageIndex].playButtonText;
         playButton.addEventListener("click", playGame);
+        playButton.id = "playButtonID";
+
         formElement.append(formTitleElement, difficultyDiv, languageDiv, deckDiv, playButton);
         mainElement.append(title, formElement)
         body.append(mainElement);
@@ -241,7 +151,7 @@ function displayMainMenu(event?: MouseEvent): void {
 
         if (difficultyIndex > 0) {
             difficultyIndex--;
-            const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionText");
+            const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionTextID");
             if (difficultyOptionText) {
                 difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
             }
@@ -253,7 +163,7 @@ function displayMainMenu(event?: MouseEvent): void {
         buttonPressSound.play();
         if (difficultyIndex < languageData[languageIndex].difficultyOptions.length - 1) {
             difficultyIndex++;
-            const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionText");
+            const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionTextID");
             if (difficultyOptionText) {
                 difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
             }
@@ -265,9 +175,10 @@ function displayMainMenu(event?: MouseEvent): void {
         buttonPressSound.play();
         if (languageIndex > 0) {
             languageIndex--;
-            const languageOptionText: HTMLElement | null = document.getElementById("languageOptionText");
+            const languageOptionText: HTMLElement | null = document.getElementById("languageOptionTextID");
             if (languageOptionText) {
-                updateMainMenuTexts(languageOptionText);
+                languageOptionText.innerText = languageOptions[languageIndex];
+                updateMainMenuTexts();
             }
         }
     }
@@ -277,9 +188,10 @@ function displayMainMenu(event?: MouseEvent): void {
         buttonPressSound.play();
         if (languageIndex < languageOptions.length - 1) {
             languageIndex++;
-            const languageOptionText: HTMLElement | null = document.getElementById("languageOptionText");
+            const languageOptionText: HTMLElement | null = document.getElementById("languageOptionTextID");
             if (languageOptionText) {
-                updateMainMenuTexts(languageOptionText);
+                languageOptionText.innerText = languageOptions[languageIndex];
+                updateMainMenuTexts();
             }
         }
     }
@@ -289,7 +201,7 @@ function displayMainMenu(event?: MouseEvent): void {
         buttonPressSound.play();
         if (deckIndex > 0) {
             deckIndex--;
-            const deckOptionText: HTMLElement | null = document.getElementById("deckOptionText");
+            const deckOptionText: HTMLElement | null = document.getElementById("deckOptionTextID");
             if (deckOptionText) {
                 deckOptionText.innerText = deckOptions[deckIndex];
             }
@@ -302,34 +214,47 @@ function displayMainMenu(event?: MouseEvent): void {
         buttonPressSound.play();
         if (deckIndex < deckOptions.length - 1) {
             deckIndex++;
-            const deckOptionText: HTMLElement | null = document.getElementById("deckOptionText");
+            const deckOptionText: HTMLElement | null = document.getElementById("deckOptionTextID");
             if (deckOptionText) {
                 deckOptionText.innerText = deckOptions[deckIndex];
             }
         }
     }
 
-    function updateMainMenuTexts(languageOptionText: HTMLElement) {
-        languageOptionText.innerText = languageOptions[languageIndex];
+    function updateMainMenuTexts() {
+        const formTitleElement: HTMLElement | null = document.getElementById("gameSettingID");
+        if (formTitleElement) {
+            formTitleElement.innerText = languageData[languageIndex].gameSettings;
+        }
+        const difficultyLabel: HTMLElement | null = document.getElementById("difficultyLabelID");
+        if (difficultyLabel) {
+            difficultyLabel.innerText = languageData[languageIndex].difficultyLabelText;
+        }
+        const difficultyOptionText: HTMLElement | null = document.getElementById("difficultyOptionTextID");
+        if (difficultyOptionText) {
+            difficultyOptionText.innerText = languageData[languageIndex].difficultyOptions[difficultyIndex];
+        }
+        const languageLabel: HTMLElement | null = document.getElementById("languageLabelID");
+        if (languageLabel) {
+            languageLabel.innerText = languageData[languageIndex].languageLabelText;
+        }
+
+        const deckLabel: HTMLElement | null = document.getElementById("deckLabelID");
+        if (deckLabel) {
+            deckLabel.innerText = languageData[languageIndex].themeLabelText;
+        }
+        const playButton: HTMLElement | null = document.getElementById("playButtonID");
+        if (playButton) {
+            playButton.innerText = languageData[languageIndex].playButtonText;
+        }
     }
 }
 
 function playGame(event: MouseEvent): void {
     event.preventDefault();
+    stopAudio(mainMenuMusic);
     buttonPressSound.play();
-    switch (deckIndex) {
-        case 0:
-            mortalKombatDeckMusic.play();
-            break;
-        case 1:
-            streetFighterDeckMusic.play();
-            break;
-        case 2:
-            zeldaDeckMusic.play();
-            break;
-        default:
-            break;
-    }
+    deckMusics[deckIndex].play();
     const pairs: Array<string> = createGameDeck(images);
     pairs.sort(() => Math.random() - 0.5);
     let clicks: number = 0;
@@ -432,18 +357,10 @@ function playGame(event: MouseEvent): void {
         deck?.remove();
         const victoryMessage1: HTMLParagraphElement = document.createElement("p");
         victoryMessage1.innerText = languageData[languageIndex].victoryMessage1Text;
-        victoryMessage1.style.color = "white";
-        victoryMessage1.style.fontSize = "5rem";
-        victoryMessage1.style.color = "white";
-        victoryMessage1.style.fontWeight = "700";
-        victoryMessage1.style.textAlign = "center";
+        victoryMessage1.classList.add("victory-message");
         const victoryMessage2: HTMLParagraphElement = document.createElement("p");
         victoryMessage2.innerText = languageData[languageIndex].victoryMessage2Text;
-        victoryMessage2.style.color = "white";
-        victoryMessage2.style.fontSize = "5rem";
-        victoryMessage2.style.color = "white";
-        victoryMessage2.style.fontWeight = "700";
-        victoryMessage2.style.textAlign = "center";
+        victoryMessage2.classList.add("victory-message");
         const replayButton: HTMLButtonElement = document.createElement("button");
         replayButton.classList.add("play-button");
         replayButton.innerText = languageData[languageIndex].replayButtonText;
