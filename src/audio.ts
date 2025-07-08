@@ -8,11 +8,14 @@ streetFighterDeckMusic.loop = true;
 zeldaDeckMusic.loop = true;
 
 export function stopAudio(audio: HTMLAudioElement) {
-    audio.pause();
-    audio.currentTime = 0;
+  audio.pause();
+  audio.currentTime = 0;
 }
 
 export const buttonPressSound = new Audio("../audio/button-press.wav");
 
-export const deckMusics: HTMLAudioElement[] = [mortalKombatDeckMusic, streetFighterDeckMusic, zeldaDeckMusic];
-
+export const deckMusics: HTMLAudioElement[] = [
+  mortalKombatDeckMusic,
+  streetFighterDeckMusic,
+  zeldaDeckMusic,
+];
