@@ -18,6 +18,8 @@ export interface LanguageData {
   victoryMessage1Text: string;
   victoryMessage2Text: string;
   difficultyOptions: string[];
+  ruleTitle: string;
+  ruleText: string;
 }
 
 export const languageData: LanguageData[] = [
@@ -35,6 +37,8 @@ export const languageData: LanguageData[] = [
     languageLabelText: "Language",
     victoryMessage1Text: "Congratulations!",
     victoryMessage2Text: "You found all the card pairs!",
+    ruleTitle: "How to Play",
+    ruleText: "Click on two cards to find matches.",
   },
   //====================================
   //============== FRENCH ==============
@@ -50,6 +54,8 @@ export const languageData: LanguageData[] = [
     languageLabelText: "Langue",
     victoryMessage1Text: "Félicitations !",
     victoryMessage2Text: "Tu as trouvé toutes les paires !",
+    ruleTitle: "Règles",
+    ruleText: "Clique sur deux cartes pour trouver les paires.",
   },
   //====================================
   //============= ITALIAN ==============
@@ -65,6 +71,8 @@ export const languageData: LanguageData[] = [
     languageLabelText: "Lingua",
     victoryMessage1Text: "Bravo!",
     victoryMessage2Text: "Hai trovato tutte le coppie di carte!",
+    ruleTitle: "How to Play",
+    ruleText: "Clicca su due carte per scoprire le coppie.",
   },
   //====================================
   //============ PORTUGUESE ============
@@ -80,6 +88,8 @@ export const languageData: LanguageData[] = [
     languageLabelText: "Língua",
     victoryMessage1Text: "Parabéns!",
     victoryMessage2Text: "Você encontrou todos os pares de cartas!",
+    ruleTitle: "How to Play",
+    ruleText: "Clique em duas cartas para encontrar os pares.",
   },
   //====================================
   //============== RUSSIAN =============
@@ -95,6 +105,8 @@ export const languageData: LanguageData[] = [
     languageLabelText: "Язык",
     victoryMessage1Text: "Поздравляем!",
     victoryMessage2Text: "Вы нашли все пары карточек!",
+    ruleTitle: "How to Play",
+    ruleText: "Нажми на две карты, чтобы найти пары.",
   },
 
   {
@@ -108,5 +120,7 @@ export const languageData: LanguageData[] = [
     languageLabelText: "भाषा",
     victoryMessage1Text: "बधाई हो!",
     victoryMessage2Text: "आपने सभी कार्ड जोड़ियाँ ढूंढ ली हैं!",
+    ruleTitle: "How to Play",
+    ruleText: "जोड़ी खोजने के लिए दो कार्ड पर क्लिक करें।.",
   },
 ];

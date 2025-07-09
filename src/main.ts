@@ -282,6 +282,7 @@ function playGame(event: MouseEvent): void {
   pairs.sort(() => Math.random() - 0.5);
 
   let clicks: number = 0;
+  let totalPlayerClicks: number = 0;
   let foundPairs: number = 0;
   let deckIsLocked: boolean = false;
   let firstClickedCard: string | null = null;
@@ -298,7 +299,34 @@ function playGame(event: MouseEvent): void {
     deckFlexContainer.classList.add("deck-flex-container");
     const infoFlexContainer: HTMLDivElement = document.createElement("div");
     infoFlexContainer.classList.add("info-flex-container");
-    infoFlexContainer.innerText = "information";
+    const ruleTitle: HTMLParagraphElement = document.createElement("h2");
+    ruleTitle.classList.add("information-title");
+    ruleTitle.innerText = "Règles";
+    const ruleText: HTMLParagraphElement = document.createElement("p");
+    ruleText.classList.add("information");
+    ruleText.innerText = languageData[languageIndex].ruleText;
+    const timerTitle: HTMLParagraphElement = document.createElement("h2");
+    timerTitle.classList.add("information-title");
+    timerTitle.innerText = "Chrono";
+    const timerValue: HTMLParagraphElement = document.createElement("p");
+    timerValue.classList.add("information");
+    timerValue.innerText = "0";
+    timerValue.id = "timerID";
+    const clickNumberTitle: HTMLParagraphElement = document.createElement("h2");
+    clickNumberTitle.classList.add("information-title");
+    clickNumberTitle.innerText = "Clics";
+    const clickNumberValue: HTMLParagraphElement = document.createElement("p");
+    clickNumberValue.classList.add("information");
+    clickNumberValue.innerText = "0";
+    clickNumberValue.id = "clickNumberValueID";
+    infoFlexContainer.append(
+      ruleTitle,
+      ruleText,
+      timerTitle,
+      timerValue,
+      clickNumberTitle,
+      clickNumberValue
+    );
     mainElement.append(deckFlexContainer);
     body.append(mainElement, infoFlexContainer);
     addCards(deckFlexContainer, pairs);
@@ -320,10 +348,17 @@ function playGame(event: MouseEvent): void {
   }
 
   function cardClicked(event: Event): void {
+    activateTimer();
     if (deckIsLocked) {
       return;
     }
     const target: HTMLElement = event.target as HTMLElement;
+    const clickNumberValue: HTMLElement | null =
+      document.getElementById("clickNumberValueID");
+    if (clickNumberValue && !deckIsLocked) {
+      totalPlayerClicks++;
+      clickNumberValue.innerText = totalPlayerClicks.toString();
+    }
     if (clicks == 0) {
       firstClickedElement = target;
       target.removeEventListener("click", cardClicked);
@@ -344,6 +379,7 @@ function playGame(event: MouseEvent): void {
         foundPairs++;
         if (foundPairs == pairs.length / 2) {
           announceVictory();
+          totalPlayerClicks = 0;
         }
         deckIsLocked = false;
         return;
@@ -403,4 +439,32 @@ function announceVictory() {
   menuButton.addEventListener("click", displayMainMenu);
   buttonContainer.append(replayButton, menuButton);
   mainContainer?.append(victoryMessage1, victoryMessage2, buttonContainer);
+  stopTimer();
+}
+
+let timerStarted = false;
+let startTime: number;
+let timerInterval: number;
+
+function startTimer(timerDisplay: HTMLElement) {
+  startTime = Date.now();
+  timerInterval = window.setInterval(() => {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    if (timerDisplay) {
+      timerDisplay.innerText = `${elapsed} sec`;
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function activateTimer(): HTMLElement | null {
+  const timerDisplay: HTMLElement | null = document.getElementById("timerID");
+  if (timerDisplay && !timerStarted) {
+    startTimer(timerDisplay);
+    timerStarted = true;
+  }
+  return timerDisplay;
 }
