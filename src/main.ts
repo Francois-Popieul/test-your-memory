@@ -28,7 +28,7 @@ const body: HTMLElement | null = document.querySelector("body");
 displayMainMenu();
 
 function displayMainMenu(): void {
-   mainMenuMusic.play();
+  mainMenuMusic.play();
   stopAudio(deckMusics[deckIndex]);
   if (body) {
     body.innerHTML = "";
@@ -337,11 +337,16 @@ function playGame(event: MouseEvent): void {
       if (body) {
         const cardContainer: HTMLDivElement = document.createElement("div");
         cardContainer.classList.add("card-container");
-        cardContainer.style.backgroundImage = `url(${deckData[deckIndex].cardBack})`;
-        const spanElement: HTMLSpanElement = document.createElement("span");
-        spanElement.classList.add(deckData[deckIndex].deckName, card, "hidden");
-        spanElement.addEventListener("click", cardClicked);
-        cardContainer.append(spanElement);
+        const innerCard: HTMLDivElement = document.createElement("div");
+        innerCard.classList.add("card-inner", deckData[deckIndex].deckName, card);
+        const cardBack: HTMLDivElement = document.createElement("div");
+        cardBack.classList.add("card-back");
+        cardBack.addEventListener("click", cardClicked);
+        cardBack.style.backgroundImage = `url(${deckData[deckIndex].cardBack})`
+        const cardFront: HTMLDivElement = document.createElement("div");
+        cardFront.classList.add("card-front", card);
+        innerCard.append(cardBack, cardFront);
+        cardContainer.append(innerCard);
         deckFlexContainer.append(cardContainer);
       }
     });
@@ -352,7 +357,11 @@ function playGame(event: MouseEvent): void {
     if (deckIsLocked) {
       return;
     }
-    const target: HTMLElement = event.target as HTMLElement;
+
+    const targetCardBack: HTMLElement = event.target as HTMLElement;
+    const cardContainer = targetCardBack.closest(".card-container") as HTMLElement;
+    cardContainer.classList.toggle("flipped");
+    const targetCardFront: HTMLElement = targetCardBack.closest(".card-inner")?.children[1] as HTMLElement;
     const clickNumberValue: HTMLElement | null =
       document.getElementById("clickNumberValueID");
     if (clickNumberValue && !deckIsLocked) {
@@ -360,18 +369,16 @@ function playGame(event: MouseEvent): void {
       clickNumberValue.innerText = totalPlayerClicks.toString();
     }
     if (clicks == 0) {
-      firstClickedElement = target;
-      target.removeEventListener("click", cardClicked);
-      target.classList.toggle("hidden");
-      firstClickedCard = target.classList[1].toString();
+      firstClickedElement = targetCardBack;
+      targetCardBack.removeEventListener("click", cardClicked);
+      firstClickedCard = targetCardFront.classList[1].toString();
       clicks++;
       return;
     } else if (clicks == 1) {
       deckIsLocked = true;
-      secondClickedElement = target;
-      target.removeEventListener("click", cardClicked);
-      target.classList.toggle("hidden");
-      secondClickedCard = target.classList[1].toString();
+      secondClickedElement = targetCardBack;
+      targetCardBack.removeEventListener("click", cardClicked);
+      secondClickedCard = targetCardFront.classList[1].toString();
       clicks = 2;
 
       if (clicks == 2 && firstClickedCard === secondClickedCard) {
@@ -392,10 +399,16 @@ function playGame(event: MouseEvent): void {
   }
 
   function flipBackCards() {
-    firstClickedElement?.addEventListener("click", cardClicked);
-    secondClickedElement?.addEventListener("click", cardClicked);
-    firstClickedElement?.classList.toggle("hidden");
-    secondClickedElement?.classList.toggle("hidden");
+    if (firstClickedElement) {
+      firstClickedElement.addEventListener("click", cardClicked);
+      const cardContainer = firstClickedElement.closest(".card-container") as HTMLElement;
+      cardContainer.classList.toggle("flipped")
+    }
+    if (secondClickedElement) {
+      secondClickedElement.addEventListener("click", cardClicked);
+      const cardContainer = secondClickedElement.closest(".card-container") as HTMLElement;
+      cardContainer.classList.toggle("flipped")
+    }
     firstClickedElement = null;
     secondClickedElement = null;
     deckIsLocked = false;
