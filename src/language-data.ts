@@ -17,9 +17,13 @@ export interface LanguageData {
   languageLabelText: string;
   victoryMessage1Text: string;
   victoryMessage2Text: string;
+  victoryMessage3Text: string;
   difficultyOptions: string[];
   ruleTitle: string;
   ruleText: string;
+  timerTitle: string;
+  timerText: string;
+  clickTitle: string;
 }
 
 export const languageData: LanguageData[] = [
@@ -35,10 +39,14 @@ export const languageData: LanguageData[] = [
     themeLabelText: "Theme",
     difficultyLabelText: "Difficulty",
     languageLabelText: "Language",
-    victoryMessage1Text: "Congratulations!",
-    victoryMessage2Text: "You found all the card pairs!",
+    victoryMessage1Text: "Congrats!",
+    victoryMessage2Text: "You found all the matches in ",
+    victoryMessage3Text: " seconds!",
     ruleTitle: "How to Play",
     ruleText: "Click on two cards to find matches.",
+    timerTitle: "Time",
+    timerText: "sec",
+    clickTitle: "Clicks",
   },
   //====================================
   //============== FRENCH ==============
@@ -53,9 +61,13 @@ export const languageData: LanguageData[] = [
     difficultyLabelText: "Difficulté",
     languageLabelText: "Langue",
     victoryMessage1Text: "Félicitations !",
-    victoryMessage2Text: "Tu as trouvé toutes les paires !",
+    victoryMessage2Text: "Tu as trouvé toutes les paires en ",
+    victoryMessage3Text: " secondes !",
     ruleTitle: "Règles",
     ruleText: "Clique sur deux cartes pour trouver les paires.",
+    timerTitle: "Temps",
+    timerText: "s",
+    clickTitle: "Clics",
   },
   //====================================
   //============= ITALIAN ==============
@@ -70,9 +82,13 @@ export const languageData: LanguageData[] = [
     difficultyLabelText: "Difficoltà",
     languageLabelText: "Lingua",
     victoryMessage1Text: "Bravo!",
-    victoryMessage2Text: "Hai trovato tutte le coppie di carte!",
-    ruleTitle: "How to Play",
+    victoryMessage2Text: "Hai trovato tutte le coppie di cartein ",
+    victoryMessage3Text: "secondi!",
+    ruleTitle: "Regole",
     ruleText: "Clicca su due carte per scoprire le coppie.",
+    timerTitle: "Tempo",
+    timerText: "s",
+    clickTitle: "Clic",
   },
   //====================================
   //============ PORTUGUESE ============
@@ -87,9 +103,13 @@ export const languageData: LanguageData[] = [
     difficultyLabelText: "Dificuldade",
     languageLabelText: "Língua",
     victoryMessage1Text: "Parabéns!",
-    victoryMessage2Text: "Você encontrou todos os pares de cartas!",
-    ruleTitle: "How to Play",
+    victoryMessage2Text: "Você encontrou todos os pares de cartas in ",
+    victoryMessage3Text: " segundos!",
+    ruleTitle: "Regras",
     ruleText: "Clique em duas cartas para encontrar os pares.",
+    timerTitle: "Tempo",
+    timerText: "s",
+    clickTitle: "Cliques",
   },
   //====================================
   //============== RUSSIAN =============
@@ -104,9 +124,13 @@ export const languageData: LanguageData[] = [
     difficultyLabelText: "Сложность",
     languageLabelText: "Язык",
     victoryMessage1Text: "Поздравляем!",
-    victoryMessage2Text: "Вы нашли все пары карточек!",
-    ruleTitle: "How to Play",
+    victoryMessage2Text: "Вы нашли все пары карточек",
+    victoryMessage3Text: "секунд!",
+    ruleTitle: "правила",
     ruleText: "Нажми на две карты, чтобы найти пары.",
+    timerTitle: "время",
+    timerText: "s",
+    clickTitle: "щелчки",
   },
 
   {
@@ -119,8 +143,12 @@ export const languageData: LanguageData[] = [
     difficultyLabelText: "कठिनाई",
     languageLabelText: "भाषा",
     victoryMessage1Text: "बधाई हो!",
-    victoryMessage2Text: "आपने सभी कार्ड जोड़ियाँ ढूंढ ली हैं!",
-    ruleTitle: "How to Play",
+    victoryMessage2Text: "आपने ",
+    victoryMessage3Text: " सेकंड में कार्ड के सभी जोड़े ढूंढ लिए!",
+    ruleTitle: "नियम",
     ruleText: "जोड़ी खोजने के लिए दो कार्ड पर क्लिक करें।.",
+    timerTitle: "समय",
+    timerText: "s",
+    clickTitle: "क्लिक",
   },
 ];

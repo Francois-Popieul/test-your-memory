@@ -28,6 +28,7 @@ const body: HTMLElement | null = document.querySelector("body");
 displayMainMenu();
 
 function displayMainMenu(): void {
+   mainMenuMusic.play();
   stopAudio(deckMusics[deckIndex]);
   if (body) {
     body.innerHTML = "";
@@ -276,7 +277,6 @@ function updateText(id: string, text: string): void {
 function playGame(event: MouseEvent): void {
   event.preventDefault();
   stopAudio(mainMenuMusic);
-  buttonPressSound.play();
   deckMusics[deckIndex].play();
   const pairs: Array<string> = createGameDeck(images);
   pairs.sort(() => Math.random() - 0.5);
@@ -301,20 +301,20 @@ function playGame(event: MouseEvent): void {
     infoFlexContainer.classList.add("info-flex-container");
     const ruleTitle: HTMLParagraphElement = document.createElement("h2");
     ruleTitle.classList.add("information-title");
-    ruleTitle.innerText = "Règles";
+    ruleTitle.innerText = languageData[languageIndex].ruleTitle;
     const ruleText: HTMLParagraphElement = document.createElement("p");
     ruleText.classList.add("information");
     ruleText.innerText = languageData[languageIndex].ruleText;
     const timerTitle: HTMLParagraphElement = document.createElement("h2");
     timerTitle.classList.add("information-title");
-    timerTitle.innerText = "Chrono";
+    timerTitle.innerText = languageData[languageIndex].timerTitle;
     const timerValue: HTMLParagraphElement = document.createElement("p");
     timerValue.classList.add("information");
     timerValue.innerText = "0";
     timerValue.id = "timerID";
     const clickNumberTitle: HTMLParagraphElement = document.createElement("h2");
     clickNumberTitle.classList.add("information-title");
-    clickNumberTitle.innerText = "Clics";
+    clickNumberTitle.innerText = languageData[languageIndex].clickTitle;
     const clickNumberValue: HTMLParagraphElement = document.createElement("p");
     clickNumberValue.classList.add("information");
     clickNumberValue.innerText = "0";
@@ -423,7 +423,8 @@ function announceVictory() {
   victoryMessage1.innerText = languageData[languageIndex].victoryMessage1Text;
   victoryMessage1.classList.add("victory-message");
   const victoryMessage2: HTMLParagraphElement = document.createElement("p");
-  victoryMessage2.innerText = languageData[languageIndex].victoryMessage2Text;
+  const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${Math.floor((Date.now() - startTime) / 1000)} ${languageData[languageIndex].victoryMessage3Text}`;
+  victoryMessage2.innerText = victoryMessage2Text;
   victoryMessage2.classList.add("victory-message");
   const buttonContainer: HTMLDivElement = document.createElement("div");
   buttonContainer.classList.add("button-flex-container");
@@ -451,13 +452,14 @@ function startTimer(timerDisplay: HTMLElement) {
   timerInterval = window.setInterval(() => {
     const elapsed = Math.floor((Date.now() - startTime) / 1000);
     if (timerDisplay) {
-      timerDisplay.innerText = `${elapsed} sec`;
+      timerDisplay.innerText = `${elapsed} ${languageData[languageIndex].timerText}`;
     }
   }, 1000);
 }
 
 function stopTimer() {
   clearInterval(timerInterval);
+  timerStarted = false;
 }
 
 function activateTimer(): HTMLElement | null {
