@@ -4,9 +4,12 @@ import {
   mainMenuMusic,
   deckMusics,
   buttonPressSound,
+  musicIndex,
+  musicIsOn,
+  toggleMusic,
 } from "./audio.js";
 import { deckOptions, deckData } from "./decks.js";
-import { activateTimer, startTimer, stopTimer, startTime } from "./timer.js";
+import { activateTimer, timerStarted, stopTimer, startTime } from "./timer.js";
 
 let difficultyIndex: number = 0;
 export let languageIndex: number = 0;
@@ -29,8 +32,13 @@ const body: HTMLElement | null = document.querySelector("body");
 displayMainMenu();
 
 function displayMainMenu(): void {
-  mainMenuMusic.play();
+  if (musicIsOn) {
+    mainMenuMusic.play();
+  }
   stopAudio(deckMusics[deckIndex]);
+  if (timerStarted === true) {
+    stopTimer();
+  }  
   if (body) {
     body.innerHTML = "";
     const mainElement: HTMLElement = document.createElement("main");
@@ -67,7 +75,6 @@ function displayMainMenu(): void {
     difficultyOptionText.classList.add("option-label");
     difficultyOptionText.innerText =
       languageData[languageIndex].difficultyOptions[difficultyIndex];
-    difficultyOptionText.style.alignContent = "center";
     difficultyOptionText.id = "difficultyOptionTextID";
 
     const difficultyRightButton: HTMLButtonElement =
@@ -75,8 +82,7 @@ function displayMainMenu(): void {
     difficultyRightButton.classList.add("right-arrow-button");
     difficultyRightButton.type = "button";
     difficultyRightButton.addEventListener("click", increaseDifficulty);
-
-    const playButton: HTMLButtonElement = document.createElement("button");
+    
     difficultySettingDiv.append(
       difficultyLeftButton,
       difficultyOptionText,
@@ -105,7 +111,6 @@ function displayMainMenu(): void {
       document.createElement("label");
     languageOptionText.classList.add("option-label");
     languageOptionText.innerText = languageOptions[languageIndex];
-    languageOptionText.style.alignContent = "center";
     languageOptionText.id = "languageOptionTextID";
 
     const languageRightButton: HTMLButtonElement =
@@ -140,7 +145,6 @@ function displayMainMenu(): void {
     const deckOptionText: HTMLLabelElement = document.createElement("label");
     deckOptionText.classList.add("option-label");
     deckOptionText.innerText = deckOptions[deckIndex];
-    deckOptionText.style.alignContent = "center";
     deckOptionText.id = "deckOptionTextID";
 
     const deckRightButton: HTMLButtonElement = document.createElement("button");
@@ -151,6 +155,36 @@ function displayMainMenu(): void {
     deckSettingDiv.append(deckLeftButton, deckOptionText, deckRightButton);
     deckDiv.append(deckLabel, deckSettingDiv);
 
+    const musicDiv: HTMLDivElement = document.createElement("div");
+    musicDiv.classList.add("field-group-1");
+
+    const musicLabel: HTMLLabelElement = document.createElement("label");
+    musicLabel.classList.add("label");
+    musicLabel.innerText = languageData[languageIndex].musicLabelText;
+    musicLabel.id = "musicLabelID";
+
+    const musicSettingDiv: HTMLDivElement = document.createElement("div");
+    musicSettingDiv.classList.add("field-group-2");
+
+    const musicLeftButton: HTMLButtonElement = document.createElement("button");
+    musicLeftButton.classList.add("left-arrow-button");
+    musicLeftButton.type = "button";
+    musicLeftButton.addEventListener("click", toggleMusic);
+
+    const musicOptionText: HTMLLabelElement = document.createElement("label");
+    musicOptionText.classList.add("option-label");
+    musicOptionText.innerText = languageData[languageIndex].musicOptions[musicIndex];
+    musicOptionText.id = "musicOptionTextID";
+
+    const musicRightButton: HTMLButtonElement = document.createElement("button");
+    musicRightButton.classList.add("right-arrow-button");
+    musicRightButton.type = "button";
+    musicRightButton.addEventListener("click", toggleMusic);
+
+    musicSettingDiv.append(musicLeftButton, musicOptionText, musicRightButton);
+    musicDiv.append(musicLabel, musicSettingDiv);
+
+    const playButton: HTMLButtonElement = document.createElement("button");
     playButton.classList.add("play-button");
     playButton.type = "button";
     playButton.innerText = languageData[languageIndex].playButtonText;
@@ -162,6 +196,7 @@ function displayMainMenu(): void {
       deckDiv,
       difficultyDiv,
       languageDiv,
+      musicDiv,
       playButton
     );
     mainElement.append(title, formElement);
@@ -255,30 +290,43 @@ function nextDeck(): void {
 
 function updateMainMenuTexts(): void {
   updateText("gameSettingID", languageData[languageIndex].gameSettings);
-  updateText(
-    "difficultyLabelID",
-    languageData[languageIndex].difficultyLabelText
-  );
-  updateText(
-    "difficultyOptionTextID",
-    languageData[languageIndex].difficultyOptions[difficultyIndex]
-  );
+  updateText("difficultyLabelID", languageData[languageIndex].difficultyLabelText);
+  updateText("difficultyOptionTextID", languageData[languageIndex].difficultyOptions[difficultyIndex]);
   updateText("languageLabelID", languageData[languageIndex].languageLabelText);
   updateText("deckLabelID", languageData[languageIndex].themeLabelText);
   updateText("playButtonID", languageData[languageIndex].playButtonText);
+  updateText("musicLabelID", languageData[languageIndex].musicLabelText);
+  updateText("musicOptionTextID", languageData[languageIndex].musicOptions[musicIndex]);
 }
 
 function updateText(id: string, text: string): void {
   const element: HTMLElement | null = document.getElementById(id);
+  // const languageOptionText: HTMLElement | null = document.getElementById("languageOptionTextID");
+  // if (element && languageIndex != 5 && languageOptionText) {
   if (element) {
     element.innerText = text;
+    // element.style.fontWeight = "400";
+    // element.style.fontSize = "1rem";
+    // element.style.fontStyle = "normal";
+    // languageOptionText.style.fontSize = "1rem";
+    // languageOptionText.style.fontWeight = "400";
   }
+  // else if (element && languageIndex == 5 && languageOptionText) {
+  //   element.innerText = text;
+  //   element.style.fontWeight = "700";
+  //   element.style.fontSize = "1.5rem";
+  //   element.style.textTransform = "translateY(-20px)";
+  //   languageOptionText.style.fontSize = "1.5rem";
+  //   languageOptionText.style.fontWeight = "700";
+  // }
 }
 
 function playGame(event: MouseEvent): void {
   event.preventDefault();
   stopAudio(mainMenuMusic);
-  deckMusics[deckIndex].play();
+  if (musicIsOn) {
+    deckMusics[deckIndex].play();
+  }
   const pairs: Array<string> = createGameDeck(images);
   pairs.sort(() => Math.random() - 0.5);
 
@@ -320,13 +368,19 @@ function playGame(event: MouseEvent): void {
     clickNumberValue.classList.add("information");
     clickNumberValue.innerText = "0";
     clickNumberValue.id = "clickNumberValueID";
+    const menuButton: HTMLButtonElement = document.createElement("button");
+    menuButton.classList.add("menu-button");
+    menuButton.type = "button";
+    menuButton.innerText = languageData[languageIndex].menuButtonText;
+    menuButton.addEventListener("click", displayMainMenu);    
     infoFlexContainer.append(
+      menuButton,
       ruleTitle,
       ruleText,
       timerTitle,
       timerValue,
       clickNumberTitle,
-      clickNumberValue
+      clickNumberValue,
     );
     mainElement.append(deckFlexContainer);
     body.append(mainElement, infoFlexContainer);
@@ -339,11 +393,15 @@ function playGame(event: MouseEvent): void {
         const cardContainer: HTMLDivElement = document.createElement("div");
         cardContainer.classList.add("card-container");
         const innerCard: HTMLDivElement = document.createElement("div");
-        innerCard.classList.add("card-inner", deckData[deckIndex].deckName, card);
+        innerCard.classList.add(
+          "card-inner",
+          deckData[deckIndex].deckName,
+          card
+        );
         const cardBack: HTMLDivElement = document.createElement("div");
         cardBack.classList.add("card-back");
         cardBack.addEventListener("click", cardClicked);
-        cardBack.style.backgroundImage = `url(${deckData[deckIndex].cardBack})`
+        cardBack.style.backgroundImage = `url(${deckData[deckIndex].cardBack})`;
         const cardFront: HTMLDivElement = document.createElement("div");
         cardFront.classList.add("card-front", card);
         innerCard.append(cardBack, cardFront);
@@ -360,9 +418,12 @@ function playGame(event: MouseEvent): void {
     }
 
     const targetCardBack: HTMLElement = event.target as HTMLElement;
-    const cardContainer = targetCardBack.closest(".card-container") as HTMLElement;
+    const cardContainer = targetCardBack.closest(
+      ".card-container"
+    ) as HTMLElement;
     cardContainer.classList.toggle("flipped");
-    const targetCardFront: HTMLElement = targetCardBack.closest(".card-inner")?.children[1] as HTMLElement;
+    const targetCardFront: HTMLElement = targetCardBack.closest(".card-inner")
+      ?.children[1] as HTMLElement;
     const clickNumberValue: HTMLElement | null =
       document.getElementById("clickNumberValueID");
     if (clickNumberValue && !deckIsLocked) {
@@ -402,13 +463,17 @@ function playGame(event: MouseEvent): void {
   function flipBackCards(): void {
     if (firstClickedElement) {
       firstClickedElement.addEventListener("click", cardClicked);
-      const cardContainer = firstClickedElement.closest(".card-container") as HTMLElement;
-      cardContainer.classList.toggle("flipped")
+      const cardContainer = firstClickedElement.closest(
+        ".card-container"
+      ) as HTMLElement;
+      cardContainer.classList.toggle("flipped");
     }
     if (secondClickedElement) {
       secondClickedElement.addEventListener("click", cardClicked);
-      const cardContainer = secondClickedElement.closest(".card-container") as HTMLElement;
-      cardContainer.classList.toggle("flipped")
+      const cardContainer = secondClickedElement.closest(
+        ".card-container"
+      ) as HTMLElement;
+      cardContainer.classList.toggle("flipped");
     }
     firstClickedElement = null;
     secondClickedElement = null;
@@ -426,21 +491,28 @@ function createGameDeck(cards: Array<string>): string[] {
 }
 
 function announceVictory(): void {
-  const mainContainer: HTMLElement | null = document.querySelector(".game-main-container");
-  const deck: HTMLElement | null = document.querySelector(".deck-flex-container");
+  const mainContainer: HTMLElement | null = document.querySelector(
+    ".game-main-container"
+  );
+  const deck: HTMLElement | null = document.querySelector(
+    ".deck-flex-container"
+  );
   deck?.remove();
   const victoryMessage1: HTMLParagraphElement = document.createElement("p");
   victoryMessage1.innerText = languageData[languageIndex].victoryMessage1Text;
   victoryMessage1.classList.add("victory-message");
   const victoryMessage2: HTMLParagraphElement = document.createElement("p");
   const elapsedTime: number = Math.floor((Date.now() - startTime) / 1000);
-  if (languageIndex != 5) {    
+  if (languageIndex != 5) {
     const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime} ${languageData[languageIndex].victoryMessage3Text}`;
     victoryMessage2.innerText = victoryMessage2Text;
     victoryMessage2.classList.add("victory-message");
-  }
-  else {
-    const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime.toLocaleString("hi-u-nu-deva")} ${languageData[languageIndex].victoryMessage3Text}`;
+  } else {
+    const victoryMessage2Text = `${
+      languageData[languageIndex].victoryMessage2Text
+    } ${elapsedTime.toLocaleString("hi-u-nu-deva")} ${
+      languageData[languageIndex].victoryMessage3Text
+    }`;
     victoryMessage2.innerText = victoryMessage2Text;
     victoryMessage2.classList.add("victory-message");
   }
@@ -451,12 +523,12 @@ function announceVictory(): void {
   replayButton.type = "button";
   replayButton.innerText = languageData[languageIndex].replayButtonText;
   replayButton.addEventListener("click", playGame);
-  const menuButton: HTMLButtonElement = document.createElement("button");
-  menuButton.classList.add("menu-button");
-  menuButton.type = "button";
-  menuButton.innerText = languageData[languageIndex].menuButtonText;
-  menuButton.addEventListener("click", displayMainMenu);
-  buttonContainer.append(replayButton, menuButton);
+  // const menuButton: HTMLButtonElement = document.createElement("button");
+  // menuButton.classList.add("menu-button");
+  // menuButton.type = "button";
+  // menuButton.innerText = languageData[languageIndex].menuButtonText;
+  // menuButton.addEventListener("click", displayMainMenu);
+  buttonContainer.append(replayButton);
   mainContainer?.append(victoryMessage1, victoryMessage2, buttonContainer);
   stopTimer();
 }

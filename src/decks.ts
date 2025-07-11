@@ -13,19 +13,19 @@ interface DeckData {
 export const deckData: DeckData[] = [
   {
     deckName: "mortal-kombat",
-    backgroundImagePath: "../images/backgrounds/mortal-kombat-background.png",
-    cardBack: "../images/mk-cardback.svg",
+    backgroundImagePath: "../assets/images/backgrounds/mortal-kombat-background.png",
+    cardBack: "../assets/images/mk-cardback.svg",
   },
 
   {
     deckName: "street-fighter",
-    backgroundImagePath: "../images/backgrounds/street-fighter-background.jpg",
-    cardBack: "../images/street-fighter-cardback.svg",
+    backgroundImagePath: "../assets/images/backgrounds/street-fighter-background.jpg",
+    cardBack: "../assets/images/street-fighter-cardback.svg",
   },
 
   {
     deckName: "zelda",
-    backgroundImagePath: "../images/backgrounds/zelda-background.jpg",
-    cardBack: "../images/zelda-cardback.svg",
+    backgroundImagePath: "../assets/images/backgrounds/zelda-background.jpg",
+    cardBack: "../assets/images/zelda-cardback.svg",
   },
 ];

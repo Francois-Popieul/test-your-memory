@@ -1,7 +1,7 @@
 import { languageData } from "./language-data.js";
 import { languageIndex } from "./main.js";
 
-let timerStarted = false;
+export let timerStarted = false;
 export let startTime: number;
 let timerInterval: number;
 
@@ -12,7 +12,7 @@ export function startTimer(timerDisplay: HTMLElement): void {
     if (timerDisplay && languageIndex != 5) {
       timerDisplay.innerText = `${elapsed} ${languageData[languageIndex].timerText}`;
     }
-    if (timerDisplay) {
+    if (timerDisplay && languageIndex == 5) {
       timerDisplay.innerText = `${elapsed.toLocaleString("hi-u-nu-deva")} ${languageData[languageIndex].timerText}`;
     }
   }, 1000);
