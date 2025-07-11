@@ -6,9 +6,10 @@ import {
   buttonPressSound,
 } from "./audio.js";
 import { deckOptions, deckData } from "./decks.js";
+import { activateTimer, startTimer, stopTimer, startTime } from "./timer.js";
 
 let difficultyIndex: number = 0;
-let languageIndex: number = 0;
+export let languageIndex: number = 0;
 let deckIndex: number = 0;
 
 const images: Array<string> = [
@@ -252,7 +253,7 @@ function nextDeck(): void {
   }
 }
 
-function updateMainMenuTexts() {
+function updateMainMenuTexts(): void {
   updateText("gameSettingID", languageData[languageIndex].gameSettings);
   updateText(
     "difficultyLabelID",
@@ -332,7 +333,7 @@ function playGame(event: MouseEvent): void {
     addCards(deckFlexContainer, pairs);
   }
 
-  function addCards(deckFlexContainer: HTMLDivElement, pairs: string[]) {
+  function addCards(deckFlexContainer: HTMLDivElement, pairs: string[]): void {
     pairs.forEach((card) => {
       if (body) {
         const cardContainer: HTMLDivElement = document.createElement("div");
@@ -398,7 +399,7 @@ function playGame(event: MouseEvent): void {
     }
   }
 
-  function flipBackCards() {
+  function flipBackCards(): void {
     if (firstClickedElement) {
       firstClickedElement.addEventListener("click", cardClicked);
       const cardContainer = firstClickedElement.closest(".card-container") as HTMLElement;
@@ -424,21 +425,25 @@ function createGameDeck(cards: Array<string>): string[] {
   return pairs;
 }
 
-function announceVictory() {
-  const mainContainer: HTMLElement | null = document.querySelector(
-    ".game-main-container"
-  );
-  const deck: HTMLElement | null = document.querySelector(
-    ".deck-flex-container"
-  );
+function announceVictory(): void {
+  const mainContainer: HTMLElement | null = document.querySelector(".game-main-container");
+  const deck: HTMLElement | null = document.querySelector(".deck-flex-container");
   deck?.remove();
   const victoryMessage1: HTMLParagraphElement = document.createElement("p");
   victoryMessage1.innerText = languageData[languageIndex].victoryMessage1Text;
   victoryMessage1.classList.add("victory-message");
   const victoryMessage2: HTMLParagraphElement = document.createElement("p");
-  const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${Math.floor((Date.now() - startTime) / 1000)} ${languageData[languageIndex].victoryMessage3Text}`;
-  victoryMessage2.innerText = victoryMessage2Text;
-  victoryMessage2.classList.add("victory-message");
+  const elapsedTime: number = Math.floor((Date.now() - startTime) / 1000);
+  if (languageIndex != 5) {    
+    const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime} ${languageData[languageIndex].victoryMessage3Text}`;
+    victoryMessage2.innerText = victoryMessage2Text;
+    victoryMessage2.classList.add("victory-message");
+  }
+  else {
+    const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime.toLocaleString("hi-u-nu-deva")} ${languageData[languageIndex].victoryMessage3Text}`;
+    victoryMessage2.innerText = victoryMessage2Text;
+    victoryMessage2.classList.add("victory-message");
+  }
   const buttonContainer: HTMLDivElement = document.createElement("div");
   buttonContainer.classList.add("button-flex-container");
   const replayButton: HTMLButtonElement = document.createElement("button");
@@ -454,32 +459,4 @@ function announceVictory() {
   buttonContainer.append(replayButton, menuButton);
   mainContainer?.append(victoryMessage1, victoryMessage2, buttonContainer);
   stopTimer();
-}
-
-let timerStarted = false;
-let startTime: number;
-let timerInterval: number;
-
-function startTimer(timerDisplay: HTMLElement) {
-  startTime = Date.now();
-  timerInterval = window.setInterval(() => {
-    const elapsed = Math.floor((Date.now() - startTime) / 1000);
-    if (timerDisplay) {
-      timerDisplay.innerText = `${elapsed} ${languageData[languageIndex].timerText}`;
-    }
-  }, 1000);
-}
-
-function stopTimer() {
-  clearInterval(timerInterval);
-  timerStarted = false;
-}
-
-function activateTimer(): HTMLElement | null {
-  const timerDisplay: HTMLElement | null = document.getElementById("timerID");
-  if (timerDisplay && !timerStarted) {
-    startTimer(timerDisplay);
-    timerStarted = true;
-  }
-  return timerDisplay;
 }

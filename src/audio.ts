@@ -7,7 +7,7 @@ mortalKombatDeckMusic.loop = true;
 streetFighterDeckMusic.loop = true;
 zeldaDeckMusic.loop = true;
 
-export function stopAudio(audio: HTMLAudioElement) {
+export function stopAudio(audio: HTMLAudioElement):void {
   audio.pause();
   audio.currentTime = 0;
 }

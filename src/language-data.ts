@@ -119,22 +119,24 @@ export const languageData: LanguageData[] = [
     gameSettings: "Настройки",
     playButtonText: "Играть",
     replayButtonText: "Играть",
-    menuButtonText: "меню",
+    menuButtonText: "Меню",
     themeLabelText: "Тема",
     difficultyLabelText: "Сложность",
     languageLabelText: "Язык",
     victoryMessage1Text: "Поздравляем!",
     victoryMessage2Text: "Вы нашли все пары карточек",
     victoryMessage3Text: "секунд!",
-    ruleTitle: "правила",
+    ruleTitle: "Правила",
     ruleText: "Нажми на две карты, чтобы найти пары.",
     timerTitle: "время",
     timerText: "s",
     clickTitle: "щелчки",
   },
-
+  //====================================
+  //=============== HINDI ==============
+  //====================================
   {
-    difficultyOptions: ["आसान", "मध्यम", "कठिन", "विशेषज्ञ"],
+    difficultyOptions: ["आसान", "मध्यम", "कठिन", "बहुत मुश्किल"],
     gameSettings: "सेटिंग्स",
     playButtonText: "खेलें",
     replayButtonText: "फिर से खेलें",
