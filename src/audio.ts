@@ -12,7 +12,7 @@ mortalKombatDeckMusic.loop = true;
 streetFighterDeckMusic.loop = true;
 zeldaDeckMusic.loop = true;
 
-export function stopAudio(audio: HTMLAudioElement):void {
+export function stopAudio(audio: HTMLAudioElement): void {
   audio.pause();
   audio.currentTime = 0;
 }
@@ -26,16 +26,16 @@ export const deckMusics: HTMLAudioElement[] = [
 ];
 
 export function toggleMusic(): void {
-  const musicOptionText: HTMLElement | null = document.getElementById("musicOptionTextID");
+  const musicOptionText: HTMLElement | null =
+    document.getElementById("musicOptionTextID");
   if (musicIsOn === true) {
     musicIsOn = false;
-    musicIndex = 1;    
+    musicIndex = 1;
     if (musicOptionText) {
       musicOptionText.innerText = languageData[languageIndex].musicOptions[1];
     }
     stopAudio(mainMenuMusic);
-  }
-  else {
+  } else {
     musicIsOn = true;
     musicIndex = 0;
     if (musicOptionText) {

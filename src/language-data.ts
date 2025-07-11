@@ -16,7 +16,7 @@ export interface LanguageData {
   difficultyLabelText: string;
   languageLabelText: string;
   musicLabelText: string;
-  musicOptions: string[],
+  musicOptions: string[];
   victoryMessage1Text: string;
   victoryMessage2Text: string;
   victoryMessage3Text: string;

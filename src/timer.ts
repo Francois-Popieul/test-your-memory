@@ -13,7 +13,9 @@ export function startTimer(timerDisplay: HTMLElement): void {
       timerDisplay.innerText = `${elapsed} ${languageData[languageIndex].timerText}`;
     }
     if (timerDisplay && languageIndex == 5) {
-      timerDisplay.innerText = `${elapsed.toLocaleString("hi-u-nu-deva")} ${languageData[languageIndex].timerText}`;
+      timerDisplay.innerText = `${elapsed.toLocaleString("hi-u-nu-deva")} ${
+        languageData[languageIndex].timerText
+      }`;
     }
   }, 1000);
 }

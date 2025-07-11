@@ -13,13 +13,15 @@ interface DeckData {
 export const deckData: DeckData[] = [
   {
     deckName: "mortal-kombat",
-    backgroundImagePath: "../assets/images/backgrounds/mortal-kombat-background.png",
+    backgroundImagePath:
+      "../assets/images/backgrounds/mortal-kombat-background.png",
     cardBack: "../assets/images/mk-cardback.svg",
   },
 
   {
     deckName: "street-fighter",
-    backgroundImagePath: "../assets/images/backgrounds/street-fighter-background.jpg",
+    backgroundImagePath:
+      "../assets/images/backgrounds/street-fighter-background.jpg",
     cardBack: "../assets/images/street-fighter-cardback.svg",
   },
 

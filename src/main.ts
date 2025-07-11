@@ -38,7 +38,7 @@ function displayMainMenu(): void {
   stopAudio(deckMusics[deckIndex]);
   if (timerStarted === true) {
     stopTimer();
-  }  
+  }
   if (body) {
     body.innerHTML = "";
     const mainElement: HTMLElement = document.createElement("main");
@@ -82,7 +82,7 @@ function displayMainMenu(): void {
     difficultyRightButton.classList.add("right-arrow-button");
     difficultyRightButton.type = "button";
     difficultyRightButton.addEventListener("click", increaseDifficulty);
-    
+
     difficultySettingDiv.append(
       difficultyLeftButton,
       difficultyOptionText,
@@ -173,10 +173,12 @@ function displayMainMenu(): void {
 
     const musicOptionText: HTMLLabelElement = document.createElement("label");
     musicOptionText.classList.add("option-label");
-    musicOptionText.innerText = languageData[languageIndex].musicOptions[musicIndex];
+    musicOptionText.innerText =
+      languageData[languageIndex].musicOptions[musicIndex];
     musicOptionText.id = "musicOptionTextID";
 
-    const musicRightButton: HTMLButtonElement = document.createElement("button");
+    const musicRightButton: HTMLButtonElement =
+      document.createElement("button");
     musicRightButton.classList.add("right-arrow-button");
     musicRightButton.type = "button";
     musicRightButton.addEventListener("click", toggleMusic);
@@ -290,13 +292,22 @@ function nextDeck(): void {
 
 function updateMainMenuTexts(): void {
   updateText("gameSettingID", languageData[languageIndex].gameSettings);
-  updateText("difficultyLabelID", languageData[languageIndex].difficultyLabelText);
-  updateText("difficultyOptionTextID", languageData[languageIndex].difficultyOptions[difficultyIndex]);
+  updateText(
+    "difficultyLabelID",
+    languageData[languageIndex].difficultyLabelText
+  );
+  updateText(
+    "difficultyOptionTextID",
+    languageData[languageIndex].difficultyOptions[difficultyIndex]
+  );
   updateText("languageLabelID", languageData[languageIndex].languageLabelText);
   updateText("deckLabelID", languageData[languageIndex].themeLabelText);
   updateText("playButtonID", languageData[languageIndex].playButtonText);
   updateText("musicLabelID", languageData[languageIndex].musicLabelText);
-  updateText("musicOptionTextID", languageData[languageIndex].musicOptions[musicIndex]);
+  updateText(
+    "musicOptionTextID",
+    languageData[languageIndex].musicOptions[musicIndex]
+  );
 }
 
 function updateText(id: string, text: string): void {
@@ -372,7 +383,7 @@ function playGame(event: MouseEvent): void {
     menuButton.classList.add("menu-button");
     menuButton.type = "button";
     menuButton.innerText = languageData[languageIndex].menuButtonText;
-    menuButton.addEventListener("click", displayMainMenu);    
+    menuButton.addEventListener("click", displayMainMenu);
     infoFlexContainer.append(
       menuButton,
       ruleTitle,
@@ -380,7 +391,7 @@ function playGame(event: MouseEvent): void {
       timerTitle,
       timerValue,
       clickNumberTitle,
-      clickNumberValue,
+      clickNumberValue
     );
     mainElement.append(deckFlexContainer);
     body.append(mainElement, infoFlexContainer);
