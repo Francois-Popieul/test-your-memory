@@ -515,13 +515,13 @@ function announceVictory(): void {
   const victoryMessage2: HTMLParagraphElement = document.createElement("p");
   const elapsedTime: number = Math.floor((Date.now() - startTime) / 1000);
   if (languageIndex != 5) {
-    const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime} ${languageData[languageIndex].victoryMessage3Text}`;
+    const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime} ${languageData[languageIndex].victoryMessage3Text}`;
     victoryMessage2.innerText = victoryMessage2Text;
     victoryMessage2.classList.add("victory-message");
   } else {
     const victoryMessage2Text = `${
       languageData[languageIndex].victoryMessage2Text
-    } ${elapsedTime.toLocaleString("hi-u-nu-deva")} ${
+    } ${elapsedTime.toLocaleString("hi-u-nu-deva")} ${
       languageData[languageIndex].victoryMessage3Text
     }`;
     victoryMessage2.innerText = victoryMessage2Text;
@@ -534,11 +534,6 @@ function announceVictory(): void {
   replayButton.type = "button";
   replayButton.innerText = languageData[languageIndex].replayButtonText;
   replayButton.addEventListener("click", playGame);
-  // const menuButton: HTMLButtonElement = document.createElement("button");
-  // menuButton.classList.add("menu-button");
-  // menuButton.type = "button";
-  // menuButton.innerText = languageData[languageIndex].menuButtonText;
-  // menuButton.addEventListener("click", displayMainMenu);
   buttonContainer.append(replayButton);
   mainContainer?.append(victoryMessage1, victoryMessage2, buttonContainer);
   stopTimer();
