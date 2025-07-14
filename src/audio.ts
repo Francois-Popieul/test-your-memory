@@ -17,7 +17,8 @@ export function stopAudio(audio: HTMLAudioElement): void {
   audio.currentTime = 0;
 }
 
-export const buttonPressSound = new Audio("../assets/audio/button-press.wav");
+export const buttonPressSound = new Audio("../assets/audio/button-press.mp3");
+export const buttonPressError = new Audio("../assets/audio/error.mp3");
 
 export const deckMusics: HTMLAudioElement[] = [
   mortalKombatDeckMusic,
@@ -26,6 +27,7 @@ export const deckMusics: HTMLAudioElement[] = [
 ];
 
 export function toggleMusic(): void {
+  buttonPressSound.play();
   const musicOptionText: HTMLElement | null =
     document.getElementById("musicOptionTextID");
   if (musicIsOn === true) {
@@ -42,5 +44,13 @@ export function toggleMusic(): void {
       musicOptionText.innerText = languageData[languageIndex].musicOptions[0];
     }
     mainMenuMusic.play();
+  }
+}
+
+export function playButtonSoundEffect(state: boolean) {
+  if (state === true) {
+    buttonPressSound.play();
+  } else {
+    buttonPressError.play();
   }
 }

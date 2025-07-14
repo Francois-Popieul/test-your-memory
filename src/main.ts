@@ -7,6 +7,7 @@ import {
   musicIndex,
   musicIsOn,
   toggleMusic,
+  playButtonSoundEffect,
 } from "./audio.js";
 import { deckOptions, deckData } from "./decks.js";
 import { activateTimer, timerStarted, stopTimer, startTime } from "./timer.js";
@@ -29,9 +30,60 @@ const images: Array<string> = [
 
 const body: HTMLElement | null = document.querySelector("body");
 
-displayMainMenu();
+const mainElement: HTMLElement = document.createElement("main");
+mainElement.classList.add("splash-screen");
+const logoContainer: HTMLDivElement = document.createElement("div");
+logoContainer.classList.add("logo-container");
+const logo: HTMLImageElement = document.createElement("img");
+logo.src = "../assets/images/popeye-productions.png";
+logo.classList.add("logo");
+const flash: HTMLDivElement = document.createElement("div");
+flash.classList.add("flash");
+const present: HTMLParagraphElement = document.createElement("p");
+present.innerText = "PRESENT";
+present.classList.add("present");
+const gameTitle: HTMLParagraphElement = document.createElement("p");
+gameTitle.innerText = "Test Your Memory";
+gameTitle.classList.add("game-title");
+const clickToPlay: HTMLParagraphElement = document.createElement("p");
+clickToPlay.innerText = "CLICK TO PLAY";
+clickToPlay.classList.add("click-to-play");
+logoContainer.append(logo);
+mainElement.append(logoContainer, present, gameTitle, flash, clickToPlay);
+body?.append(mainElement);
+const myDocument = document;
+document.addEventListener("click", displayMainMenu);
+
+setTimeout(() => {
+  logo.classList.add("visible");
+}, 500);
+
+setTimeout(() => {
+  present.classList.add("visible");
+}, 2000);
+
+setTimeout(() => {
+  gameTitle.classList.add("visible");
+}, 3000);
+
+setTimeout(() => {
+  flash.style.opacity = "0.8";
+
+  setTimeout(() => {
+    flash.style.opacity = "0";
+  }, 100);
+}, 4000);
+
+setTimeout(() => {
+  clickToPlay.classList.add("visible");
+}, 5000);
+
+setTimeout(() => {
+  clickToPlay.classList.add("blinking");
+}, 5100);
 
 function displayMainMenu(): void {
+  document.removeEventListener("click", displayMainMenu);
   if (musicIsOn) {
     mainMenuMusic.play();
   }
@@ -207,7 +259,7 @@ function displayMainMenu(): void {
 }
 
 function reduceDifficulty(): void {
-  buttonPressSound.play();
+  playButtonSoundEffect(difficultyIndex > 0);
 
   if (difficultyIndex > 0) {
     difficultyIndex--;
@@ -222,7 +274,10 @@ function reduceDifficulty(): void {
 }
 
 function increaseDifficulty(): void {
-  buttonPressSound.play();
+  playButtonSoundEffect(
+    difficultyIndex < languageData[languageIndex].difficultyOptions.length - 1
+  );
+
   if (
     difficultyIndex <
     languageData[languageIndex].difficultyOptions.length - 1
@@ -239,7 +294,7 @@ function increaseDifficulty(): void {
 }
 
 function previousLanguage(): void {
-  buttonPressSound.play();
+  playButtonSoundEffect(languageIndex > 0);
   if (languageIndex > 0) {
     languageIndex--;
     const languageOptionText: HTMLElement | null = document.getElementById(
@@ -253,6 +308,8 @@ function previousLanguage(): void {
 }
 
 function nextLanguage(): void {
+  playButtonSoundEffect(languageIndex < languageOptions.length - 1);
+
   buttonPressSound.play();
   if (languageIndex < languageOptions.length - 1) {
     languageIndex++;
@@ -267,7 +324,7 @@ function nextLanguage(): void {
 }
 
 function previousDeck(): void {
-  buttonPressSound.play();
+  playButtonSoundEffect(deckIndex > 0);
   if (deckIndex > 0) {
     deckIndex--;
     const deckOptionText: HTMLElement | null =
@@ -279,7 +336,8 @@ function previousDeck(): void {
 }
 
 function nextDeck(): void {
-  buttonPressSound.play();
+  playButtonSoundEffect(deckIndex < deckData.length - 1);
+
   if (deckIndex < deckOptions.length - 1) {
     deckIndex++;
     const deckOptionText: HTMLElement | null =
