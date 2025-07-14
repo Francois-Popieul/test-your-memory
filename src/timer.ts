@@ -1,5 +1,5 @@
 import { languageData } from "./language-data.js";
-import { languageIndex } from "./main.js";
+import { languageIndex } from "./main-menu.js";
 
 export let timerStarted = false;
 export let startTime: number;

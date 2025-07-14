@@ -1,5 +1,5 @@
 import { languageData } from "./language-data.js";
-import { languageIndex } from "./main.js";
+import { languageIndex } from "./main-menu.js";
 
 const mortalKombatDeckMusic = new Audio("../assets/audio/mortal-kombat.mp3");
 const streetFighterDeckMusic = new Audio("../assets/audio/street-fighter.mp3");

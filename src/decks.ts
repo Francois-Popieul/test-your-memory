@@ -4,6 +4,18 @@ export const deckOptions: string[] = [
   "Zelda",
 ];
 
+export const images: Array<string> = [
+  "image-1",
+  "image-2",
+  "image-3",
+  "image-4",
+  "image-5",
+  "image-6",
+  "image-7",
+  "image-8",
+  "image-9",
+];
+
 interface DeckData {
   deckName: string;
   backgroundImagePath: string;

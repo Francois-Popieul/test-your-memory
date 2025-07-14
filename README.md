@@ -5,7 +5,7 @@
 🛠️ Features
 <br>✅ Try to find all the matches as fast as possible with a minimum number of clicks.
 <br>✅ Play in English, French, Italian, Portuguese, Russian or Hindi.
-<br>✅ A link to play is available in the about section of the page.
+<br>✅ A link to play is available in the "About" section of the page.
 
 📸 Preview
 
