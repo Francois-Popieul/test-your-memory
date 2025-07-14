@@ -428,14 +428,22 @@ function playGame(event: MouseEvent): void {
     timerTitle.innerText = languageData[languageIndex].timerTitle;
     const timerValue: HTMLParagraphElement = document.createElement("p");
     timerValue.classList.add("information");
-    timerValue.innerText = "0";
+    if (languageIndex != 5) {
+      timerValue.innerText = "0";
+    } else {
+      timerValue.innerText = "०";
+    }
     timerValue.id = "timerID";
     const clickNumberTitle: HTMLParagraphElement = document.createElement("h2");
     clickNumberTitle.classList.add("information-title");
     clickNumberTitle.innerText = languageData[languageIndex].clickTitle;
     const clickNumberValue: HTMLParagraphElement = document.createElement("p");
     clickNumberValue.classList.add("information");
-    clickNumberValue.innerText = "0";
+    if (languageIndex != 5) {
+      clickNumberValue.innerText = "0";
+    } else {
+      clickNumberValue.innerText = "०";
+    }
     clickNumberValue.id = "clickNumberValueID";
     const menuButton: HTMLButtonElement = document.createElement("button");
     menuButton.classList.add("menu-button");
@@ -454,6 +462,7 @@ function playGame(event: MouseEvent): void {
     mainElement.append(deckFlexContainer);
     body.append(mainElement, infoFlexContainer);
     addCards(deckFlexContainer, pairs);
+    displayCards();
   }
 
   function addCards(deckFlexContainer: HTMLDivElement, pairs: string[]): void {
@@ -480,12 +489,22 @@ function playGame(event: MouseEvent): void {
     });
   }
 
-  function cardClicked(event: Event): void {
+  function displayCards(): void {
+    setTimeout(() => {
+      const cards = document.querySelectorAll(".card-container");
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add("card-distribution");
+        }, index * 200);
+      });
+    }, 100);
+  }
+
+  function cardClicked(event: MouseEvent): void {
     activateTimer();
     if (deckIsLocked) {
       return;
     }
-
     const targetCardBack: HTMLElement = event.target as HTMLElement;
     const cardContainer = targetCardBack.closest(
       ".card-container"
@@ -497,7 +516,12 @@ function playGame(event: MouseEvent): void {
       document.getElementById("clickNumberValueID");
     if (clickNumberValue && !deckIsLocked) {
       totalPlayerClicks++;
-      clickNumberValue.innerText = totalPlayerClicks.toString();
+      if (languageIndex != 5) {
+        clickNumberValue.innerText = totalPlayerClicks.toString();
+      } else {
+        clickNumberValue.innerText =
+          totalPlayerClicks.toLocaleString("hi-u-nu-deva");
+      }
     }
     if (clicks == 0) {
       firstClickedElement = targetCardBack;
@@ -567,24 +591,23 @@ function announceVictory(): void {
     ".deck-flex-container"
   );
   deck?.remove();
-  const victoryMessage1: HTMLParagraphElement = document.createElement("p");
-  victoryMessage1.innerText = languageData[languageIndex].victoryMessage1Text;
-  victoryMessage1.classList.add("victory-message");
-  const victoryMessage2: HTMLParagraphElement = document.createElement("p");
+  const victoryMessage: HTMLParagraphElement = document.createElement("p");
   const elapsedTime: number = Math.floor((Date.now() - startTime) / 1000);
+  let completevictoryMessage: string = "";
   if (languageIndex != 5) {
-    const victoryMessage2Text = `${languageData[languageIndex].victoryMessage2Text} ${elapsedTime} ${languageData[languageIndex].victoryMessage3Text}`;
-    victoryMessage2.innerText = victoryMessage2Text;
-    victoryMessage2.classList.add("victory-message");
+    completevictoryMessage = `${languageData[languageIndex].victoryMessage1Text}\n${languageData[languageIndex].victoryMessage2Text} ${elapsedTime} ${languageData[languageIndex].victoryMessage3Text}`;
   } else {
-    const victoryMessage2Text = `${
+    completevictoryMessage = `${
+      languageData[languageIndex].victoryMessage1Text
+    }\n${
       languageData[languageIndex].victoryMessage2Text
     } ${elapsedTime.toLocaleString("hi-u-nu-deva")} ${
       languageData[languageIndex].victoryMessage3Text
     }`;
-    victoryMessage2.innerText = victoryMessage2Text;
-    victoryMessage2.classList.add("victory-message");
   }
+  victoryMessage.innerText = completevictoryMessage;
+  victoryMessage.classList.add("victory-message");
+
   const buttonContainer: HTMLDivElement = document.createElement("div");
   buttonContainer.classList.add("button-flex-container");
   const replayButton: HTMLButtonElement = document.createElement("button");
@@ -593,6 +616,6 @@ function announceVictory(): void {
   replayButton.innerText = languageData[languageIndex].replayButtonText;
   replayButton.addEventListener("click", playGame);
   buttonContainer.append(replayButton);
-  mainContainer?.append(victoryMessage1, victoryMessage2, buttonContainer);
+  mainContainer?.append(victoryMessage, buttonContainer);
   stopTimer();
 }
