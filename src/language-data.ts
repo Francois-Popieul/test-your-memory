@@ -1,4 +1,4 @@
-export const languageOptions: string[] = [
+export const languageOptions: Array<string> = [
   "English",
   "Français",
   "Italiano",

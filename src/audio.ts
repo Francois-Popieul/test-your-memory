@@ -1,10 +1,16 @@
 import { languageData } from "./language-data.js";
 import { languageIndex } from "./main-menu.js";
 
-const mortalKombatDeckMusic = new Audio("../assets/audio/mortal-kombat.mp3");
-const streetFighterDeckMusic = new Audio("../assets/audio/street-fighter.mp3");
-const zeldaDeckMusic = new Audio("../assets/audio/zelda.mp3");
-export const mainMenuMusic = new Audio("../assets/audio/main-menu.mp3");
+const mortalKombatDeckMusic: HTMLAudioElement = new Audio(
+  "../assets/audio/mortal-kombat.mp3"
+);
+const streetFighterDeckMusic: HTMLAudioElement = new Audio(
+  "../assets/audio/street-fighter.mp3"
+);
+const zeldaDeckMusic: HTMLAudioElement = new Audio("../assets/audio/zelda.mp3");
+export const mainMenuMusic: HTMLAudioElement = new Audio(
+  "../assets/audio/main-menu.mp3"
+);
 export let musicIsOn: boolean = true;
 export let musicIndex: number = 0;
 mainMenuMusic.loop = true;
@@ -17,8 +23,12 @@ export function stopAudio(audio: HTMLAudioElement): void {
   audio.currentTime = 0;
 }
 
-export const buttonPressSound = new Audio("../assets/audio/button-press.mp3");
-export const buttonPressError = new Audio("../assets/audio/error.mp3");
+export const buttonPressSound: HTMLAudioElement = new Audio(
+  "../assets/audio/button-press.mp3"
+);
+export const buttonPressError: HTMLAudioElement = new Audio(
+  "../assets/audio/error.mp3"
+);
 
 export const deckMusics: HTMLAudioElement[] = [
   mortalKombatDeckMusic,
@@ -47,7 +57,7 @@ export function toggleMusic(): void {
   }
 }
 
-export function playButtonSoundEffect(state: boolean) {
+export function playButtonSoundEffect(state: boolean): void {
   if (state === true) {
     buttonPressSound.play();
   } else {

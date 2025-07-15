@@ -1,4 +1,4 @@
-export const deckOptions: string[] = [
+export const deckOptions: Array<string> = [
   "Mortal Kombat",
   "Street Fighter",
   "Zelda",

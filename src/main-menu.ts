@@ -113,6 +113,7 @@ export function displayMainMenu(): void {
       languageOptionText,
       languageRightButton
     );
+
     languageDiv.append(languageLabel, languageSettingDiv);
 
     const deckDiv: HTMLDivElement = document.createElement("div");
@@ -142,6 +143,7 @@ export function displayMainMenu(): void {
     deckRightButton.addEventListener("click", nextDeck);
 
     deckSettingDiv.append(deckLeftButton, deckOptionText, deckRightButton);
+
     deckDiv.append(deckLabel, deckSettingDiv);
 
     const musicDiv: HTMLDivElement = document.createElement("div");
@@ -191,6 +193,7 @@ export function displayMainMenu(): void {
       playButton
     );
     mainElement.append(title, formElement);
+
     body.append(mainElement);
   }
 }
@@ -307,6 +310,11 @@ function updateMainMenuTexts(): void {
 
 function updateText(id: string, text: string): void {
   const element: HTMLElement | null = document.getElementById(id);
+ 
+  // Plus complexe que prévu d'augmenter la taille de police de l'hindi
+  // et de rétablir la taille du texte pour les autres langues
+  // Mise à jour remise à plus tard
+
   // const languageOptionText: HTMLElement | null = document.getElementById("languageOptionTextID");
   // if (element && languageIndex != 5 && languageOptionText) {
   if (element) {
